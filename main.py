@@ -4,111 +4,132 @@ root = tk.Tk()
 root.geometry("500x500")
 root.title("MINESWEEPER")
 
-class Selection:
+#
+sel_frame = tk.Frame(root)
+sel_frame.grid(row=0,column=0)
+
+var = tk.IntVar()
+
+e_frame = tk.Frame(root)
+e_frame.grid(row=0,column=0)
+
+m_frame = tk.Frame(root)
+m_frame.grid(row=0,column=0)
+
+h_frame = tk.Frame(root)
+h_frame.grid(row=0,column=0)
+
+class Selection:  
     def __init__(self,display):
         self.display = display
         
         self.title = tk.Label(display,text="SELECT MODE")
         self.title.grid(row=0,column=1)
 
-        self.var = tk.IntVar()
-
-        self.easy_sel = tk.Radiobutton(display,text="EASY",variable=self.var,value=0)
+        self.easy_sel = tk.Radiobutton(display,text="EASY",variable=var,value=0)
         self.easy_sel.grid(row=1,column=0)
 
-        self.med_sel = tk.Radiobutton(display,text="MEDIUM",variable=self.var,value=1)
+        self.med_sel = tk.Radiobutton(display,text="MEDIUM",variable=var,value=1)
         self.med_sel.grid(row=1,column=1)
 
-        self.hard_sel = tk.Radiobutton(display,text="HARD",variable=self.var,value=2)
+        self.hard_sel = tk.Radiobutton(display,text="HARD",variable=var,value=2)
         self.hard_sel.grid(row=1,column=2)        
     
-        self.submit_b = tk.Button(display,text="SUBMIT")
+        self.submit_b = tk.Button(display,text="SUBMIT",command=submit)
         self.submit_b.grid(row=2,column=1)
 
-    def submit(self):
-        if self.var == 0:
-            return "e"
-        elif self.var == 1:
-            return "m"
-        else:
-            return "h"
+class Button:
+    def __init__(self,display,row,column,command):
+        self.display = display
 
-s = Selection(root)
-s.submit()
+        self.row = row
+        
+        self.column = column
 
-#functions
-# def submit():
-#     if var.get() == 0:
-#         easy_board()
-#     elif var.get() == 1:
-#         medium_board()
-#     else:
-#         hard_board()
+        self.command = command
+    
+    def make(self):
+        b = tk.Button(self.display,width=3)
+        b.grid(row=self.row,column=self.column)
 
-# def back():
-#     selection_frame.tkraise()
-#     easy_frame.grid_forget()
-#     med_frame.grid_forget()
-#     hard_frame.grid_forget()
+class Back_Button:
+    def __init__(self,display,x,y,command):
+        self.display = display
 
-# class Back_Button:
-#     def __init__(self,display,row,column,text,command):
-#         self.display = display
-#         self.row = row
-#         self.column = column
-#         self.text = text
-#         self.command = command
-#     def make(self):
-#         b = tk.Button(self.display,text=self.text,command=self.command)
-#         b.grid(row=self.row,column=self.column)
+        self.x = x
 
-# #selection frame
-# def selection():
-#     global selection_frame
-#     selection_frame = tk.Frame(root)
-#     selection_frame.grid(row=0,column=0)
+        self.y = y
 
-#     selection_title = tk.Label(selection_frame,text="SELECT MODE")
-#     selection_title.grid(row=0,column=1)
+        self.command = command
+    
+    def make(self):
+        b_button = tk.Button(self.display,text="BACK",command=self.command)
+        b_button.place(x=self.x,y=self.y)
 
-#     var = tk.IntVar()
+class Easy_Board:
+    def __init__(self,display):
+        self.display = display      
 
-#     easy_sel = tk.Radiobutton(selection_frame,text="EASY",variable=var,value=0)
-#     easy_sel.grid(row=1,column=0)
+        for i in range(6):
+            for a in range(6):
+                b = Button(self.display,i,a,blank)
+                b.make()
 
-#     med_sel = tk.Radiobutton(selection_frame,text="MEDIUM",variable=var,value=1)
-#     med_sel.grid(row=1,column=1)
+        back_b = Back_Button(display,100,100,blank)
+        back_b.make()
 
-#     hard_sel = tk.Radiobutton(selection_frame,text="HARD",variable=var,value=2)
-#     hard_sel.grid(row=1,column=2)
+class Medium_Board:
+    def __init__(self,display):
+        self.display = display      
 
-#     submit = tk.Button(selection_frame,text="SUBMIT",command=submit)
-#     submit.grid(row=2,column=1)
+        for i in range(9):
+            for a in range(9):
+                b = Button(self.display,i,a,blank)
+                b.make()
+        
+        back_b = Back_Button(display,100,100,blank)
+        back_b.make()
 
-# #boards
+class Hard_Board:
+    def __init__(self,display):
+        self.display = display      
 
-# def easy_board():
-#     easy_frame = tk.Frame(root)
-#     easy_frame.grid(row=0,column=0)
+        for i in range(15):
+            for a in range(15):
+                b = Button(self.display,i,a,blank)
+                b.make()
 
-#     back_b = Back_Button(easy_frame,0,0,"BACK",back)
-#     back_b.make()
+        back_b = Back_Button(display,100,100,blank)
+        back_b.make()
 
-# def medium_board():
-#     med_frame = tk.Frame(root)
-#     med_frame.grid(row=0,column=0)
+def blank():
+    print("test")
 
-#     back_b = Back_Button(med_frame,0,0,"BACK",back)
-#     back_b.make()
+def submit():
+    if var.get() == 0:
+        e = Easy_Board(e_frame)
+        e_frame.tkraise
+        sel_frame.grid_forget()
 
-# def hard_board():
-#     hard_frame = tk.Frame(root)
-#     hard_frame.grid(row=0,column=0)
+    elif var.get() == 1:
+        m = Medium_Board(m_frame)
+        m_frame.tkraise
+        sel_frame.grid_forget()
 
-#     back_b = Back_Button(hard_frame,0,0,"BACK",back)
-#     back_b.make()
+    elif var.get() == 2:
+        h = Hard_Board(h_frame)
+        h_frame.tkraise
+        sel_frame.grid_forget()
 
-# selection()
-# selection_frame.tkraise()
+def back():
+    s = Selection(sel_frame)
+    sel_frame.tkraise()
+    e_frame.grid_forget()
+    m_frame.grid_forget()
+    h_frame.grid_forget()
 
+sel_frame.tkraise()
+s = Selection(sel_frame)
+
+#loop
 root.mainloop()
